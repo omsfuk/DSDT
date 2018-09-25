@@ -40,6 +40,8 @@ DefinitionBlock ("", "DSDT", 2, "HASEE ", "PARADISE", 0x00000034)
      * because the disassembler had to guess at the number of arguments
      * required for each:
      */
+    External (_SB.PCI0.PEG0.PEGP._DSM, MethodObj)
+    External (_SB.PCI0.PEG0.PEGP._PS3, MethodObj)
     External (_PR_.CFGD, FieldUnitObj)
     External (_PR_.CPU0._PPC, IntObj)
     External (_PR_.CPU0._PSS, PkgObj)
@@ -11963,9 +11965,25 @@ DefinitionBlock ("", "DSDT", 2, "HASEE ", "PARADISE", 0x00000034)
             \_SB.TPM.PTS (Arg0)
         }
     }
+    
+    Method (PINI, 0, NotSerialized)
+{
+    \_SB.PCI0.PEG0.PEGP._DSM (Buffer (0x10)
+    {
+        /* 0000 */ 0xF8, 0xD8, 0x86, 0xA4, 0xDA, 0x0B, 0x1B, 0x47,
+        /* 0008 */ 0xA7, 0x2B, 0x60, 0x42, 0xA6, 0xB5, 0xBE, 0xe0
+    }, 0x0100, 0x1A, Buffer(0x04)
+    {
+        0x01, 0x00, 0x00, 0x03
+    })
+    \_SB.PCI0.PEG0.PEGP._PS3()
+}
+
+
 
     Method (_WAK, 1, Serialized)  // _WAK: Wake
     {
+        PINI()
         P8XH (One, 0xAB)
         WAK (Arg0)
         ADBG ("_WAK")
@@ -18026,9 +18044,6 @@ DefinitionBlock ("", "DSDT", 2, "HASEE ", "PARADISE", 0x00000034)
         Return (Zero)
     }
 
-    Method (PINI, 0, NotSerialized)
-    {
-    }
     Scope (_SB)
     {
         Device (PNLF)

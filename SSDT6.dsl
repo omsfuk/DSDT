@@ -20,6 +20,7 @@
  */
 DefinitionBlock ("", "SSDT", 1, "HASEE ", "PARADISE", 0x00001000)
 {
+    External (PINI, MethodObj)
     External (_SB_.PCI0.GFX0._DOD, MethodObj)    // 0 Arguments
     External (_SB_.PCI0.LPCB.EC__.ADP_, FieldUnitObj)
     External (_SB_.PCI0.LPCB.EC__.DGPU, FieldUnitObj)
@@ -413,6 +414,7 @@ DefinitionBlock ("", "SSDT", 1, "HASEE ", "PARADISE", 0x00001000)
 
         Method (_INI, 0, NotSerialized)  // _INI: Initialize
         {
+            PINI()
             Store (Zero, \_SB.PCI0.PEG0.PEGP._ADR)
         }
 
